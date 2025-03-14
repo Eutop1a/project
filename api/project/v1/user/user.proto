@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package question.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "validate/validate.proto";
+
+option go_package           = "helloworld/api/project/v1;v1";
+option java_multiple_files  = true;
+option java_package         = "dev.kratos.api.project.v1";
+option java_outer_classname = "ProjectProtoV1";
+
+// --------------------------
+// 服务定义
+// --------------------------
+
+service User {
+    rpc Register(RegisterReq) returns (RegisterResp) {
+        option (google.api.http) = {
+            post: "/api/v1/user/register"
+            body: "*"
+        };
+    }
+    rpc Login(LoginReq) returns (LoginResp) {
+        option (google.api.http) = {
+            post: "/api/v1/user/login"
+            body: "*"
+        };
+    }
+    rpc Logout(LogoutReq) returns (google.protobuf.Empty) {
+        option (google.api.http) = {
+            post: "/api/v1/user/{user_id}/logout"
+            body: "*"
+        };
+    }
+}
+
+message RegisterReq {
+    string username    = 1 [(validate.rules).string = { min_len: 4 }];
+    string password    = 2 [(validate.rules).string = { min_len: 4 }];
+    string email       = 3 [(validate.rules).string = { min_len: 4 }];
+    string verify_code = 4;
+}
+
+message RegisterResp {
+    int32 status_code   = 1;
+    string msg          = 2;
+    string access_token = 3;
+}
+
+message LoginReq {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResp {
+    int32 status_code   = 1;
+    string msg          = 2;
+    string access_token = 3;
+}
+
+message LogoutReq {
+    string user_id = 1;
+}

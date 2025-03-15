@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package project.v1.admin;
+
+import "google/api/annotations.proto";
+import "project/v1/common/common.proto";
+import "project/v1/user/user.proto";
+
+option go_package = "helloworld/api/project/v1/admin;adminv1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.user.v1";
+option java_outer_classname = "AdminProtoV1";
+
+service Admin {
+  // 用户管理
+  rpc GetUserList(GetUserListReq) returns (GetUserListResp) {
+    option (google.api.http) = {
+      get: "/api/v1/admin/users"
+    };
+  }
+
+  rpc DeleteUser(DeleteUserReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      delete: "/api/v1/admin/user/{user_id}"
+    };
+  }
+
+  // 管理员管理
+  rpc AddAdmin(AddAdminReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/add-admin"
+      body: "*"
+    };
+  }
+
+  // 撤销单个管理员
+  rpc RemoveAdmin(RemoveAdminReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/remove-admin"
+      body: "*"
+    };
+  }
+
+  // 批量撤销管理员
+  rpc BatchRemoveAdmin(BatchRemoveAdminReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      post: "/api/v1/admin/batch-remove-admin"
+      body: "*"
+    };
+  }
+}
+
+message GetUserListReq {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message GetUserListResp {
+  common.CommonResp common_resp   = 1;
+  repeated user.UserInfo users = 2;
+  int32 total = 3;
+}
+
+message DeleteUserReq {
+  string user_id = 1;
+}
+
+message AddAdminReq {
+  string user_id = 1;
+}
+
+message RemoveAdminReq {
+  string user_id = 1;
+}
+
+message BatchRemoveAdminReq {
+  repeated string user_id_list = 1;
+}
+
+// kratos proto client ./api/project/v1/admin/admin.proto --proto_path=./api

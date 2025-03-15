@@ -16,6 +16,7 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewUserRepo,
+	NewAdminRepo,
 	NewRedis,
 	NewMySQL,
 )

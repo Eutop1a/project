@@ -21,21 +21,14 @@ type UserRepository interface {
 	GetUserInfoByUsername(ctx context.Context, username string) (*domain.UserInfo, error)
 }
 
-type RegisterInfo struct {
-	UserID   *int64
-	Username string
-	Password string
-	IsAdmin  bool
-}
-
-type UserUsecase struct {
+type UserUseCase struct {
 	repo   UserRepository
 	jwt    *auth.JWTAuth
 	logger *log.Helper
 }
 
-func NewUserUseCase(repo UserRepository, jwt *auth.JWTAuth, logger log.Logger) (useCase *UserUsecase, err error) {
-	useCase = &UserUsecase{
+func NewUserUseCase(repo UserRepository, jwt *auth.JWTAuth, logger log.Logger) (useCase *UserUseCase, err error) {
+	useCase = &UserUseCase{
 		repo:   repo,
 		jwt:    jwt,
 		logger: log.NewHelper(logger),
@@ -43,7 +36,7 @@ func NewUserUseCase(repo UserRepository, jwt *auth.JWTAuth, logger log.Logger) (
 	return
 }
 
-func (uc *UserUsecase) Register(ctx context.Context, registerInfo *RegisterInfo) (accessToken string, err error) {
+func (uc *UserUseCase) Register(ctx context.Context, registerInfo *domain.UserInfo) (accessToken string, err error) {
 	newUser, err := uc.handlerRegisterInfo(ctx, registerInfo)
 	if err != nil {
 		return "", err
@@ -57,7 +50,7 @@ func (uc *UserUsecase) Register(ctx context.Context, registerInfo *RegisterInfo)
 	return accessToken, err
 }
 
-func (uc *UserUsecase) Login(ctx context.Context, user *RegisterInfo) (accessToken string, err error) {
+func (uc *UserUseCase) Login(ctx context.Context, user *domain.UserInfo) (accessToken string, err error) {
 	userinfo, err := uc.repo.GetUserInfoByUsername(ctx, user.Username)
 	if err != nil {
 		return "", err
@@ -73,15 +66,15 @@ func (uc *UserUsecase) Login(ctx context.Context, user *RegisterInfo) (accessTok
 	return accessToken, nil
 }
 
-func (uc *UserUsecase) CheckPassword(ctx context.Context, password, hashedPassword string) error {
+func (uc *UserUseCase) CheckPassword(ctx context.Context, password, hashedPassword string) error {
 	return uc.repo.CheckPassword(ctx, password, hashedPassword)
 }
 
-func (uc *UserUsecase) Logout(ctx context.Context, userId string) error {
+func (uc *UserUseCase) Logout(ctx context.Context, userId string) error {
 	return nil
 }
 
-func (uc *UserUsecase) handlerRegisterInfo(ctx context.Context, registerInfo *RegisterInfo) (*model.User, error) {
+func (uc *UserUseCase) handlerRegisterInfo(ctx context.Context, registerInfo *domain.UserInfo) (*model.User, error) {
 	userdo := query.Q.User
 	count, err := userdo.WithContext(ctx).Where(userdo.Username.Eq(registerInfo.Username)).Count()
 	if err != nil {
@@ -99,11 +92,11 @@ func (uc *UserUsecase) handlerRegisterInfo(ctx context.Context, registerInfo *Re
 	if err != nil {
 		return nil, errdef.ErrEncryptPasswordFailed
 	}
-	if *registerInfo.UserID <= 0 {
-		*registerInfo.UserID = snowflake.GetID()
+	if registerInfo.UserID <= 0 {
+		registerInfo.UserID = snowflake.GetID()
 	}
 	newUser := &model.User{
-		ID:           *registerInfo.UserID,
+		ID:           registerInfo.UserID,
 		Username:     registerInfo.Username,
 		PasswordHash: hashedPassword,
 		IsAdmin:      false,

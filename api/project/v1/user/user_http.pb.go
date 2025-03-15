@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: api/project/v1/user/user.proto
 
-package v1
+package userv1
 
 import (
 	context "context"
@@ -20,9 +20,9 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserLogin = "/question.v1.User/Login"
-const OperationUserLogout = "/question.v1.User/Logout"
-const OperationUserRegister = "/question.v1.User/Register"
+const OperationUserLogin = "/project.v1.user.User/Login"
+const OperationUserLogout = "/project.v1.user.User/Logout"
+const OperationUserRegister = "/project.v1.user.User/Register"
 
 type UserHTTPServer interface {
 	Login(context.Context, *LoginReq) (*LoginResp, error)

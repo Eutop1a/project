@@ -10,7 +10,8 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 	"github.com/gorilla/handlers"
 	"github.com/redis/go-redis/v9"
-	project "helloworld/api/project/v1/user"
+	adminv1 "helloworld/api/project/v1/admin"
+	userv1 "helloworld/api/project/v1/user"
 	"helloworld/internal/conf"
 	"helloworld/internal/pkg/codecs"
 	"helloworld/internal/pkg/middlewares/auth"
@@ -26,8 +27,8 @@ func NewWhitelistMatcher() selector.MatchFunc {
 	operation 是 HTTP 及 gRPC 统一的 gRPC path。
 	gRPC path 的拼接规则为 /包名.服务名/方法名(/package.Service/Method)。
 	*/
-	whiteList["/question.v1.User/Register"] = struct{}{}
-	whiteList["/question.v1.User/Login"] = struct{}{}
+	whiteList["/project.v1.user.User/Register"] = struct{}{}
+	whiteList["/project.v1.user.User/Login"] = struct{}{}
 	//whiteList["/question.v1.User/Logout"] = struct{}{}
 	return func(ctx context.Context, operation string) bool {
 		if _, ok := whiteList[operation]; ok {
@@ -41,6 +42,7 @@ func NewWhitelistMatcher() selector.MatchFunc {
 func NewHTTPServer(
 	c *conf.Server,
 	user *service.UserService,
+	admin *service.AdminService,
 	jwt *conf.JWT,
 	redis *redis.Client,
 	logger log.Logger) *http.Server {
@@ -76,6 +78,7 @@ func NewHTTPServer(
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	project.RegisterUserHTTPServer(srv, user)
+	userv1.RegisterUserHTTPServer(srv, user)
+	adminv1.RegisterAdminHTTPServer(srv, admin)
 	return srv
 }

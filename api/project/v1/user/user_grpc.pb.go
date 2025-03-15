@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: api/project/v1/user/user.proto
 
-package v1
+package userv1
 
 import (
 	context "context"
@@ -20,9 +20,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	User_Register_FullMethodName = "/question.v1.User/Register"
-	User_Login_FullMethodName    = "/question.v1.User/Login"
-	User_Logout_FullMethodName   = "/question.v1.User/Logout"
+	User_Register_FullMethodName = "/project.v1.user.User/Register"
+	User_Login_FullMethodName    = "/project.v1.user.User/Login"
+	User_Logout_FullMethodName   = "/project.v1.user.User/Logout"
 )
 
 // UserClient is the client API for User service.
@@ -177,7 +177,7 @@ func _User_Logout_Handler(srv interface{}, ctx context.Context, dec func(interfa
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var User_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "question.v1.User",
+	ServiceName: "project.v1.user.User",
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

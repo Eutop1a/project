@@ -4,14 +4,23 @@
 
 package model
 
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
 const TableNameUser = "user"
 
 // User mapped from table <user>
 type User struct {
-	ID           int64  `gorm:"column:id;type:bigint;primaryKey" json:"id"`
-	Username     string `gorm:"column:username;type:varchar(50);not null;uniqueIndex:username,priority:1" json:"username"`
-	PasswordHash string `gorm:"column:password_hash;type:varchar(255);not null" json:"password_hash"`
-	IsAdmin      bool   `gorm:"column:is_admin;type:tinyint(1);not null" json:"is_admin"`
+	ID           int64          `gorm:"column:id;type:bigint;primaryKey" json:"id"`
+	Username     string         `gorm:"column:username;type:varchar(50);not null;uniqueIndex:username,priority:1" json:"username"`
+	PasswordHash string         `gorm:"column:password_hash;type:varchar(255);not null" json:"password_hash"`
+	IsAdmin      bool           `gorm:"column:is_admin;type:tinyint(1);not null" json:"is_admin"`
+	CreatedAt    time.Time      `gorm:"column:created_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt    time.Time      `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt    gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp;index:idx_user_deleted_at,priority:1" json:"deleted_at"`
 }
 
 // TableName User's table name

@@ -3,19 +3,20 @@
 
 openapi: 3.0.3
 info:
-    title: User API
+    title: Admin API
     version: 0.0.1
 paths:
-    /api/v1/user/login:
+    /api/v1/admin/add-admin:
         post:
             tags:
-                - User
-            operationId: User_Login
+                - Admin
+            description: 管理员管理
+            operationId: Admin_AddAdmin
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/LoginReq'
+                            $ref: '#/components/schemas/AddAdminReq'
                 required: true
             responses:
                 "200":
@@ -23,23 +24,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/LoginResp'
+                                $ref: '#/components/schemas/CommonResp'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/user/register:
+    /api/v1/admin/batch-remove-admin:
         post:
             tags:
-                - User
-            operationId: User_Register
+                - Admin
+            description: 批量撤销管理员
+            operationId: Admin_BatchRemoveAdmin
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/RegisterReq'
+                            $ref: '#/components/schemas/BatchRemoveAdminReq'
                 required: true
             responses:
                 "200":
@@ -47,34 +49,86 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/RegisterResp'
+                                $ref: '#/components/schemas/CommonResp'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/user/{userId}/logout:
+    /api/v1/admin/remove-admin:
         post:
             tags:
-                - User
-            operationId: User_Logout
+                - Admin
+            description: 撤销单个管理员
+            operationId: Admin_RemoveAdmin
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RemoveAdminReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/admin/user/{userId}:
+        delete:
+            tags:
+                - Admin
+            operationId: Admin_DeleteUser
             parameters:
                 - name: userId
                   in: path
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LogoutReq'
-                required: true
             responses:
                 "200":
                     description: OK
-                    content: {}
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/admin/users:
+        get:
+            tags:
+                - Admin
+            description: 用户管理
+            operationId: Admin_GetUserList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetUserListResp'
                 default:
                     description: Default error response
                     content:
@@ -83,6 +137,43 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
+        AddAdminReq:
+            type: object
+            properties:
+                userId:
+                    type: string
+        BatchRemoveAdminReq:
+            type: object
+            properties:
+                userIdList:
+                    type: array
+                    items:
+                        type: string
+        CommonResp:
+            type: object
+            properties:
+                statusCode:
+                    type: integer
+                    format: int32
+                msg:
+                    type: string
+                metadata:
+                    type: object
+                    additionalProperties:
+                        type: string
+            description: common.proto
+        GetUserListResp:
+            type: object
+            properties:
+                commonResp:
+                    $ref: '#/components/schemas/CommonResp'
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/UserInfo'
+                total:
+                    type: integer
+                    format: int32
         GoogleProtobufAny:
             type: object
             properties:
@@ -91,48 +182,10 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        LoginReq:
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-        LoginResp:
-            type: object
-            properties:
-                statusCode:
-                    type: integer
-                    format: int32
-                msg:
-                    type: string
-                accessToken:
-                    type: string
-        LogoutReq:
+        RemoveAdminReq:
             type: object
             properties:
                 userId:
-                    type: string
-        RegisterReq:
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-                email:
-                    type: string
-                verifyCode:
-                    type: string
-        RegisterResp:
-            type: object
-            properties:
-                statusCode:
-                    type: integer
-                    format: int32
-                msg:
-                    type: string
-                accessToken:
                     type: string
         Status:
             type: object
@@ -150,5 +203,20 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UserInfo:
+            type: object
+            properties:
+                userId:
+                    type: string
+                username:
+                    type: string
+                email:
+                    type: string
+                isAdmin:
+                    type: boolean
+                createTime:
+                    type: string
+                updateTime:
+                    type: string
 tags:
-    - name: User
+    - name: Admin

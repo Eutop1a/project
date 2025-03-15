@@ -1,15 +1,15 @@
 syntax = "proto3";
 
-package question.v1;
+package project.v1.user;
 
+import "project/v1/common/common.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
-import "validate/validate.proto";
 
-option go_package           = "helloworld/api/project/v1;v1";
+option go_package           = "helloworld/api/project/v1/user;userv1";
 option java_multiple_files  = true;
-option java_package         = "dev.kratos.api.project.v1";
-option java_outer_classname = "ProjectProtoV1";
+option java_package         = "dev.kratos.api.user.v1";
+option java_outer_classname = "UserProtoV1";
 
 // --------------------------
 // 服务定义
@@ -37,16 +37,15 @@ service User {
 }
 
 message RegisterReq {
-    string username    = 1 [(validate.rules).string = { min_len: 4 }];
-    string password    = 2 [(validate.rules).string = { min_len: 4 }];
-    string email       = 3 [(validate.rules).string = { min_len: 4 }];
+    string username    = 1;
+    string password    = 2;
+    string email       = 3;
     string verify_code = 4;
 }
 
 message RegisterResp {
-    int32 status_code   = 1;
-    string msg          = 2;
-    string access_token = 3;
+    common.CommonResp common_resp   = 1;
+    string access_token = 2;
 }
 
 message LoginReq {
@@ -55,11 +54,19 @@ message LoginReq {
 }
 
 message LoginResp {
-    int32 status_code   = 1;
-    string msg          = 2;
-    string access_token = 3;
+    common.CommonResp common_resp   = 1;
+    string access_token = 2;
 }
 
 message LogoutReq {
     string user_id = 1;
+}
+
+message UserInfo {
+    string user_id = 1;
+    string username = 2;
+    string email = 3;
+    bool is_admin = 4;
+    string create_time = 5;
+    string update_time = 6;
 }

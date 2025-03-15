@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package project.v1.common;
+
+option go_package = "helloworld/api/project/v1/common;commonv1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.common.v1";
+option java_outer_classname = "CommonProtoV1";
+
+// common.proto
+message CommonResp {
+  int32 status_code = 1;
+  string msg = 2;
+  map<string, string> metadata = 3;  // 扩展元数据
+}

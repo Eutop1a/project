@@ -36,7 +36,7 @@ func (u *userRepository) Register(ctx context.Context, user *model.User) error {
 			tx.Rollback()
 		}
 	}()
-	err = tx.User.Create(user)
+	err = tx.User.WithContext(ctx).Create(user)
 	if err != nil {
 		return err
 	}
@@ -57,8 +57,7 @@ func (u *userRepository) CheckPassword(ctx context.Context, password, hashedPass
 
 func (u *userRepository) GetUserInfoByUsername(ctx context.Context, username string) (*domain.UserInfo, error) {
 	user := query.User
-	userdo := user.WithContext(ctx)
-	userInfo, err := userdo.Where(user.Username.Eq(username)).
+	userInfo, err := user.WithContext(ctx).Where(user.Username.Eq(username)).
 		Select(user.ID, user.Username, user.IsAdmin, user.PasswordHash).First()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

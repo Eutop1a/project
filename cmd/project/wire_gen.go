@@ -33,14 +33,21 @@ func wireApp(confServer *conf.Server, confData *conf.Data, jwt *conf.JWT, logger
 	}
 	userRepository := data.NewUserRepo(dataData, logger)
 	jwtAuth := auth.NewJWTAuth(jwt)
-	userUsecase, err := biz.NewUserUseCase(userRepository, jwtAuth, logger)
+	userUseCase, err := biz.NewUserUseCase(userRepository, jwtAuth, logger)
 	if err != nil {
 		cleanup()
 		return nil, nil, err
 	}
-	userService := service.NewUserService(userUsecase)
+	userService := service.NewUserService(userUseCase)
 	grpcServer := server.NewGRPCServer(confServer, userService, logger)
-	httpServer := server.NewHTTPServer(confServer, userService, jwt, client, logger)
+	adminRepository := data.NewAdminRepo(dataData, logger)
+	adminUseCase, err := biz.NewAdminUseCase(adminRepository, jwtAuth, logger)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	adminService := service.NewAdminService(adminUseCase)
+	httpServer := server.NewHTTPServer(confServer, userService, adminService, jwt, client, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

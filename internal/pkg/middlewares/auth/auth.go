@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"errors"
 	"github.com/go-kratos/kratos/v2/middleware"
 	"github.com/go-kratos/kratos/v2/transport"
 	"github.com/golang-jwt/jwt/v5"
@@ -10,7 +9,6 @@ import (
 	"helloworld/internal/conf"
 	"helloworld/internal/pkg/ecode/errdef"
 	"helloworld/internal/pkg/helper"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -153,14 +151,14 @@ func JwtAuth(secret string, accessTokenExpireTime time.Duration, redisClient *re
 				// Check if access token is existed in redis,
 				// because user may log out manually, or the refresh token is expired,
 				// which will delete access token in redis.
-				_, err2 := redisClient.Get(ctx, strconv.FormatInt(aclaims.UserID, 10)).Result()
-				aTokenNotExist := errors.Is(err2, redis.Nil)
-				if err2 != nil { // Other error occurs
-					if aTokenNotExist {
-						return nil, errdef.ErrUserLoggedOut
-					}
-					return nil, helper.HandleError(errdef.INTERNAL_ERROR, err2)
-				}
+				//_, err2 := redisClient.Get(ctx, strconv.FormatInt(aclaims.UserID, 10)).Result()
+				//aTokenNotExist := errors.Is(err2, redis.Nil)
+				//if err2 != nil { // Other error occurs
+				//	if aTokenNotExist {
+				//		return nil, errdef.ErrUserLoggedOut
+				//	}
+				//	return nil, helper.HandleError(errdef.INTERNAL_ERROR, err2)
+				//}
 
 				// Access token is invalid. Check if access token is expired
 				if !atoken.Valid {

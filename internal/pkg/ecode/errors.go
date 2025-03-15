@@ -42,7 +42,13 @@ const (
 	USERINFO_GetUserInfoFailed
 	USERINFO_ModifySignatureFailed
 	IDENTITY_ErrUserLoggedOut
+
 	// parse HTTP request's file errors
 	HTTP_FormFileFailed
 	HTTP_UploadAvatarFailed
+
+	// admin errors
+	ADMIN_UserNotFound
+	ADMIN_FailedToGetUser
+	ADMIN_FailedToUpdateUserd
 )

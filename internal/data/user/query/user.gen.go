@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"helloworld/internal/data/dal/model"
+	"helloworld/internal/data/user/model"
 )
 
 func newUser(db *gorm.DB, opts ...gen.DOOption) user {

@@ -10,10 +10,10 @@ import (
 )
 
 //go:generate go run generator.go
-func main() {
-	db := getGormDB()
+func main0() {
+	dbUser := getUserGormDB()
 	g := gen.NewGenerator(gen.Config{
-		OutPath: "../../internal/data/dal/query",
+		OutPath: "../../internal/data/user/query",
 
 		// WithDefaultQuery 生成默认查询结构体(作为全局变量使用), 即`Q`结构体和其字段(各表模型)
 		// WithoutContext 生成没有context调用限制的代码供查询
@@ -39,7 +39,7 @@ func main() {
 
 		WithUnitTest: false,
 	})
-	g.UseDB(db)
+	g.UseDB(dbUser)
 	// 自定义字段的数据类型
 	// 统一数字类型为int64,兼容protobuf
 	dataMap := map[string]func(columnType gorm.ColumnType) (dataType string){
@@ -53,33 +53,20 @@ func main() {
 	// 自定义字段的数据类型
 	// 统一数字类型为int64,兼容protobuf
 	g.WithDataTypeMap(dataMap)
-
 	// 生成model
 	user := g.GenerateModel("user",
 		gen.FieldType("is_admin", "bool"))
-	//level := g.GenerateModel("user_leve）",
-	//	gen.FieldType("level", "uint32"),
-	//	gen.FieldType("exp", "uint32"),
-	//	gen.FieldType("next_exp", "uint32"),
-	//	gen.WithMethod(methods.UserLevel{}))
-	//followlist := g.GenerateModel("follow_list")
-	//userFollows := g.GenerateModel("user_follows")
-	//userFollowed := g.GenerateModel("user_fans")
-	//userFavorites := g.GenerateModel("user_favorites")
-
 	g.ApplyBasic(user)
-	//, level, followlist,
-	//userFollows, userFollowed, userFavorites)
-
 	g.Execute()
-
 }
-func getGormDB() *gorm.DB {
+
+func getUserGormDB() *gorm.DB {
 	c := config.New(
 		config.WithSource(
-			file.NewSource("../../configs/config.yaml"),
+			file.NewSource("../../configs/config.user.yaml"),
 		),
 	)
+
 	defer c.Close()
 
 	if err := c.Load(); err != nil {

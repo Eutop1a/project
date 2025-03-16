@@ -6,8 +6,8 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
 	"helloworld/internal/biz"
-	"helloworld/internal/data/dal/model"
-	"helloworld/internal/data/dal/query"
+	"helloworld/internal/data/user/model"
+	"helloworld/internal/data/user/query"
 	"helloworld/internal/domain"
 	"helloworld/internal/pkg/ecode/errdef"
 	"helloworld/internal/pkg/encrypt"
@@ -66,4 +66,5 @@ func (u *userRepository) GetUserInfoByUsername(ctx context.Context, username str
 		return nil, err
 	}
 	return domain.NewUserInfo(userInfo), nil
+	return nil, nil
 }

@@ -3,13 +3,13 @@ package service
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	adminv1 "helloworld/api/project/v1/admin"
 	commonv1 "helloworld/api/project/v1/common"
 	pb "helloworld/api/project/v1/user"
 	userv1 "helloworld/api/project/v1/user"
 	"helloworld/internal/biz"
 	"strconv"
-	"time"
 )
 
 type AdminService struct {
@@ -69,8 +69,8 @@ func (a *AdminService) GetUserList(ctx context.Context, req *adminv1.GetUserList
 			UserId:     strconv.FormatInt(user.UserID, 10),
 			Username:   user.Username,
 			IsAdmin:    user.IsAdmin,
-			CreateTime: user.CreateAt.Format(time.RFC3339),
-			UpdateTime: user.UpdateAt.Format(time.RFC3339),
+			CreateTime: timestamppb.New(user.CreateAt),
+			UpdateTime: timestamppb.New(user.UpdateAt),
 		})
 	}
 	return &adminv1.GetUserListResp{

@@ -1,7 +1,7 @@
 package domain
 
 import (
-	"helloworld/internal/data/dal/model"
+	"helloworld/internal/data/user/model"
 	"time"
 )
 

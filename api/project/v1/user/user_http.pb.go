@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-http v2.8.4
 // - protoc             v5.26.1
-// source: project/v1/user/user.proto
+// source: api/project/v1/user/user.proto
 
 package userv1
 

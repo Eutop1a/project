@@ -3,20 +3,20 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Question API
     version: 0.0.1
 paths:
-    /api/v1/admin/add-admin:
+    /api/v1/question/create/choice:
         post:
             tags:
-                - Admin
-            description: 管理员管理
-            operationId: Admin_AddAdmin
+                - Question
+            description: 创建选择题
+            operationId: Question_CreateQuestionChoice
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.admin.AddAdminReq'
+                            $ref: '#/components/schemas/QuestionChoiceInfo'
                 required: true
             responses:
                 "200":
@@ -24,18 +24,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.common.CommonResp'
-    /api/v1/admin/batch-remove-admin:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/create/essay:
         post:
             tags:
-                - Admin
-            description: 批量撤销管理员
-            operationId: Admin_BatchRemoveAdmin
+                - Question
+            description: 创建简答题/大题
+            operationId: Question_CreateQuestionEssay
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.admin.BatchRemoveAdminReq'
+                            $ref: '#/components/schemas/QuestionEssayInfo'
                 required: true
             responses:
                 "200":
@@ -43,18 +49,24 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.common.CommonResp'
-    /api/v1/admin/remove-admin:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/create/fill:
         post:
             tags:
-                - Admin
-            description: 撤销单个管理员
-            operationId: Admin_RemoveAdmin
+                - Question
+            description: 创建填空题
+            operationId: Question_CreateQuestionFill
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.admin.RemoveAdminReq'
+                            $ref: '#/components/schemas/QuestionFillInfo'
                 required: true
             responses:
                 "200":
@@ -62,14 +74,46 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.common.CommonResp'
-    /api/v1/admin/user/{userId}:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/create/judge:
+        post:
+            tags:
+                - Question
+            description: 创建判断题
+            operationId: Question_CreateQuestionJudge
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/QuestionJudgeInfo'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/delete/{id}:
         delete:
             tags:
-                - Admin
-            operationId: Admin_DeleteUser
+                - Question
+            description: 删除题目
+            operationId: Question_DeleteQuestion
             parameters:
-                - name: userId
+                - name: id
                   in: path
                   required: true
                   schema:
@@ -80,13 +124,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.common.CommonResp'
-    /api/v1/admin/users:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/list:
         get:
             tags:
-                - Admin
-            description: 用户管理
-            operationId: Admin_GetUserList
+                - Question
+            description: 获取题目列表
+            operationId: Question_GetQuestionList
             parameters:
                 - name: page
                   in: query
@@ -104,28 +154,19 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.admin.GetUserListResp'
-    /api/v1/problem:
-        post:
-            tags:
-                - Problem
-            description: 题目管理
-            operationId: Problem_CreateProblem
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/project.v1.problem.CreateProblemReq'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content: {}
-    /api/v1/problem/{id}:
+                                $ref: '#/components/schemas/GetQuestionListResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/update/choice/{id}:
         put:
             tags:
-                - Problem
-            operationId: Problem_UpdateProblem
+                - Question
+            description: 更新选择题
+            operationId: Question_UpdateQuestionChoice
             parameters:
                 - name: id
                   in: path
@@ -136,59 +177,38 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.problem.UpdateProblemReq'
+                            $ref: '#/components/schemas/QuestionChoiceInfo'
                 required: true
             responses:
                 "200":
                     description: OK
-                    content: {}
-        delete:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/update/essay/{id}:
+        put:
             tags:
-                - Problem
-            operationId: Problem_DeleteProblem
+                - Question
+            description: 更新简答题/大题
+            operationId: Question_UpdateQuestionEssay
             parameters:
                 - name: id
                   in: path
                   required: true
                   schema:
                     type: string
-            responses:
-                "200":
-                    description: OK
-                    content: {}
-    /api/v1/problems:
-        get:
-            tags:
-                - Problem
-            operationId: Problem_GetProblemList
-            parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-                - name: pageSize
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/project.v1.problem.GetProblemListResp'
-    /api/v1/user/login:
-        post:
-            tags:
-                - User
-            operationId: User_Login
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.user.LoginReq'
+                            $ref: '#/components/schemas/QuestionEssayInfo'
                 required: true
             responses:
                 "200":
@@ -196,32 +216,21 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.user.LoginResp'
-    /api/v1/user/register:
-        post:
-            tags:
-                - User
-            operationId: User_Register
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/project.v1.user.RegisterReq'
-                required: true
-            responses:
-                "200":
-                    description: OK
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/project.v1.user.RegisterResp'
-    /api/v1/user/{userId}/logout:
-        post:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/update/fill/{id}:
+        put:
             tags:
-                - User
-            operationId: User_Logout
+                - Question
+            description: 更新填空题
+            operationId: Question_UpdateQuestionFill
             parameters:
-                - name: userId
+                - name: id
                   in: path
                   required: true
                   schema:
@@ -230,44 +239,55 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/project.v1.user.LogoutReq'
+                            $ref: '#/components/schemas/QuestionFillInfo'
                 required: true
             responses:
                 "200":
                     description: OK
-                    content: {}
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    /api/v1/question/update/judge/{id}:
+        put:
+            tags:
+                - Question
+            description: 更新判断题
+            operationId: Question_UpdateQuestionJudge
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/QuestionJudgeInfo'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CommonResp'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
 components:
     schemas:
-        project.v1.admin.AddAdminReq:
-            type: object
-            properties:
-                userId:
-                    type: string
-        project.v1.admin.BatchRemoveAdminReq:
-            type: object
-            properties:
-                userIdList:
-                    type: array
-                    items:
-                        type: string
-        project.v1.admin.GetUserListResp:
-            type: object
-            properties:
-                commonResp:
-                    $ref: '#/components/schemas/project.v1.common.CommonResp'
-                users:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/project.v1.user.UserInfo'
-                total:
-                    type: integer
-                    format: int32
-        project.v1.admin.RemoveAdminReq:
-            type: object
-            properties:
-                userId:
-                    type: string
-        project.v1.common.CommonResp:
+        CommonResp:
             type: object
             properties:
                 statusCode:
@@ -280,111 +300,117 @@ components:
                     additionalProperties:
                         type: string
             description: common.proto
-        project.v1.problem.CreateProblemReq:
+        GetQuestionListResp:
             type: object
             properties:
-                title:
-                    type: string
-                description:
-                    type: string
-                difficulty:
-                    type: integer
-                    format: int32
-                testCases:
-                    type: string
-        project.v1.problem.GetProblemListResp:
-            type: object
-            properties:
-                problems:
+                commonResp:
+                    $ref: '#/components/schemas/CommonResp'
+                questions:
                     type: array
                     items:
-                        $ref: '#/components/schemas/project.v1.problem.ProblemInfo'
+                        $ref: '#/components/schemas/QuestionInfo'
                 total:
                     type: integer
                     format: int32
-        project.v1.problem.ProblemInfo:
+            description: 获取题目列表响应
+        GoogleProtobufAny:
+            type: object
+            properties:
+                '@type':
+                    type: string
+                    description: The type of the serialized message.
+            additionalProperties: true
+            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
+        QuestionBaseInfo:
+            type: object
+            properties:
+                type:
+                    type: string
+                content:
+                    type: string
+                imageUrl:
+                    type: string
+                difficulty:
+                    type: number
+                    format: float
+                knowledge:
+                    type: string
+            description: 题目基础信息
+        QuestionChoiceInfo:
             type: object
             properties:
                 id:
                     type: string
-                title:
+                baseInfo:
+                    $ref: '#/components/schemas/QuestionBaseInfo'
+                optionA:
                     type: string
-                description:
+                optionB:
                     type: string
-                difficulty:
-                    type: integer
-                    format: int32
-                createTime:
+                optionC:
                     type: string
-                updateTime:
+                optionD:
                     type: string
-        project.v1.problem.UpdateProblemReq:
+                answer:
+                    type: string
+            description: 选择题信息
+        QuestionEssayInfo:
             type: object
             properties:
                 id:
                     type: string
-                title:
+                baseInfo:
+                    $ref: '#/components/schemas/QuestionBaseInfo'
+                reference:
                     type: string
-                description:
-                    type: string
-                difficulty:
-                    type: integer
-                    format: int32
-                testCases:
-                    type: string
-        project.v1.user.LoginReq:
+            description: 简答题/大题信息
+        QuestionFillInfo:
             type: object
             properties:
-                username:
+                id:
                     type: string
-                password:
+                baseInfo:
+                    $ref: '#/components/schemas/QuestionBaseInfo'
+                answer:
                     type: string
-        project.v1.user.LoginResp:
+            description: 填空题信息
+        QuestionInfo:
             type: object
             properties:
-                commonResp:
-                    $ref: '#/components/schemas/project.v1.common.CommonResp'
-                accessToken:
-                    type: string
-        project.v1.user.LogoutReq:
+                choice:
+                    $ref: '#/components/schemas/QuestionChoiceInfo'
+                fill:
+                    $ref: '#/components/schemas/QuestionFillInfo'
+                judge:
+                    $ref: '#/components/schemas/QuestionJudgeInfo'
+                essay:
+                    $ref: '#/components/schemas/QuestionEssayInfo'
+            description: 题目信息
+        QuestionJudgeInfo:
             type: object
             properties:
-                userId:
+                id:
                     type: string
-        project.v1.user.RegisterReq:
-            type: object
-            properties:
-                username:
-                    type: string
-                password:
-                    type: string
-                email:
-                    type: string
-                verifyCode:
-                    type: string
-        project.v1.user.RegisterResp:
-            type: object
-            properties:
-                commonResp:
-                    $ref: '#/components/schemas/project.v1.common.CommonResp'
-                accessToken:
-                    type: string
-        project.v1.user.UserInfo:
-            type: object
-            properties:
-                userId:
-                    type: string
-                username:
-                    type: string
-                email:
-                    type: string
-                isAdmin:
+                baseInfo:
+                    $ref: '#/components/schemas/QuestionBaseInfo'
+                answer:
                     type: boolean
-                createTime:
+            description: 判断题信息
+        Status:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
+                    format: int32
+                message:
                     type: string
-                updateTime:
-                    type: string
+                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
+                details:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/GoogleProtobufAny'
+                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
+            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
 tags:
-    - name: Admin
-    - name: Problem
-    - name: User
+    - name: Question

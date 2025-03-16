@@ -9,7 +9,8 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"helloworld/internal/conf"
-	"helloworld/internal/data/dal/query"
+	query2 "helloworld/internal/data/question/query"
+	query1 "helloworld/internal/data/user/query"
 )
 
 // ProviderSet is data providers.
@@ -17,6 +18,8 @@ var ProviderSet = wire.NewSet(
 	NewData,
 	NewUserRepo,
 	NewAdminRepo,
+	NewQuestionRepo,
+	NewKnowledgeRepo,
 	NewRedis,
 	NewMySQL,
 )
@@ -56,7 +59,8 @@ func NewMySQL(c *conf.Data) *gorm.DB {
 	if err := sqlDB.Ping(); err != nil {
 		panic(err)
 	}
-	query.SetDefault(db)
+	query1.SetDefault(db)
+	query2.SetDefault(db)
 	return db
 }
 

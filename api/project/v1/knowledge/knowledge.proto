@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package project.v1.knowledge;
+
+import "project/v1/common/common.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package           = "helloworld/api/project/v1/knowledge;knowledgev1";
+option java_multiple_files  = true;
+option java_package         = "dev.kratos.api.knowledge.v1";
+option java_outer_classname = "KnowledgeProtoV1";
+
+// --------------------------
+// 服务定义
+// --------------------------
+
+service Knowledge {
+  rpc CreateKnowledge(CreateKnowledgeReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      post: "/api/v1/knowledge/create"
+      body: "*"
+    };
+  }
+  rpc UpdateKnowledge(UpdateKnowledgeReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      put: "/api/v1/knowledge/update/{id}"
+      body: "*"
+    };
+  }
+  rpc DeleteKnowledge(DeleteKnowledgeReq) returns (common.CommonResp) {
+    option (google.api.http) = {
+      delete: "/api/v1/knowledge/delete/{id}"
+    };
+  }
+  rpc GetKnowledge(GetKnowledgeReq) returns (GetKnowledgeResp) {
+    option (google.api.http) = {
+      get: "/api/v1/knowledge/{id}"
+    };
+  }
+  rpc ListKnowledge(ListKnowledgeReq) returns (ListKnowledgeResp) {
+    option (google.api.http) = {
+      get: "/api/v1/knowledge/list"
+    };
+  }
+}
+
+message KnowledgeInfo {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  google.protobuf.Timestamp create_time = 4;
+  google.protobuf.Timestamp update_time = 5;
+}
+
+message CreateKnowledgeReq {
+  KnowledgeInfo knowledge = 1;
+}
+
+message UpdateKnowledgeReq {
+  string id = 1;
+  KnowledgeInfo knowledge = 2;
+}
+
+message DeleteKnowledgeReq {
+  string id = 1;
+}
+
+message GetKnowledgeReq {
+  string id = 1;
+}
+
+message GetKnowledgeResp {
+  common.CommonResp common = 1;
+  KnowledgeInfo knowledge = 2;
+}
+
+message ListKnowledgeReq {
+  int32 page_size = 1;
+  int32 page_num = 2;
+}
+
+message ListKnowledgeResp {
+  common.CommonResp common = 1;
+  repeated KnowledgeInfo knowledge_list = 2;
+  int32 total_count = 3;
+}

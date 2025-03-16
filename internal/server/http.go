@@ -11,6 +11,8 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/redis/go-redis/v9"
 	adminv1 "helloworld/api/project/v1/admin"
+	knowledgev1 "helloworld/api/project/v1/knowledge"
+	questionv1 "helloworld/api/project/v1/question"
 	userv1 "helloworld/api/project/v1/user"
 	"helloworld/internal/conf"
 	"helloworld/internal/pkg/codecs"
@@ -43,6 +45,8 @@ func NewHTTPServer(
 	c *conf.Server,
 	user *service.UserService,
 	admin *service.AdminService,
+	question *service.QuestionService,
+	knowledge *service.KnowledgeService,
 	jwt *conf.JWT,
 	redis *redis.Client,
 	logger log.Logger) *http.Server {
@@ -80,5 +84,7 @@ func NewHTTPServer(
 	srv := http.NewServer(opts...)
 	userv1.RegisterUserHTTPServer(srv, user)
 	adminv1.RegisterAdminHTTPServer(srv, admin)
+	questionv1.RegisterQuestionHTTPServer(srv, question)
+	knowledgev1.RegisterKnowledgeHTTPServer(srv, knowledge)
 	return srv
 }

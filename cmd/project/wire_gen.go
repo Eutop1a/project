@@ -47,7 +47,11 @@ func wireApp(confServer *conf.Server, confData *conf.Data, jwt *conf.JWT, logger
 		return nil, nil, err
 	}
 	adminService := service.NewAdminService(adminUseCase)
-	httpServer := server.NewHTTPServer(confServer, userService, adminService, jwt, client, logger)
+	questionRepository := data.NewQuestionRepo(dataData, logger)
+	questionUseCase := biz.NewQuestionUseCase(questionRepository, jwtAuth, logger)
+	questionService := service.NewQuestionService(questionUseCase, logger)
+	knowledgeService := service.NewKnowledgeService(questionUseCase, logger)
+	httpServer := server.NewHTTPServer(confServer, userService, adminService, questionService, knowledgeService, jwt, client, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()

@@ -1,6 +1,6 @@
 package domain
 
-import "helloworld/internal/data/dal/model"
+import "helloworld/internal/data/user/model"
 
 type UserInfo struct {
 	UserID   int64

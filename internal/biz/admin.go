@@ -3,7 +3,7 @@ package biz
 import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
-	"helloworld/internal/data/dal/model"
+	"helloworld/internal/data/user/model"
 	"helloworld/internal/domain"
 	"helloworld/internal/pkg/ecode/errdef"
 	"helloworld/internal/pkg/middlewares/auth"
@@ -78,7 +78,6 @@ func (uc *AdminUseCase) BatchRemoveAdmin(ctx context.Context, ids []string) (err
 	if len(ids) == 0 {
 		return nil // 无需处理
 	}
-	// 将 ids 转换为 int64
 	intIDs := make([]int64, 0, len(ids))
 	for _, v := range ids {
 		id, err := strconv.ParseInt(v, 10, 64)

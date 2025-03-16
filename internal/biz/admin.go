@@ -5,6 +5,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"helloworld/internal/data/dal/model"
 	"helloworld/internal/domain"
+	"helloworld/internal/pkg/ecode/errdef"
 	"helloworld/internal/pkg/middlewares/auth"
 	"strconv"
 )
@@ -17,9 +18,9 @@ type AdminRepository interface {
 	// GetUserList 获取用户列表
 	GetUserList(ctx context.Context, page, size int) ([]*model.User, error)
 	// RemoveAdmin 删除管理员
-	RemoveAdmin(ctx context.Context, id string) error
+	RemoveAdmin(ctx context.Context, id int64) error
 	// BatchRemoveAdmin 批量删除管理员
-	BatchRemoveAdmin(ctx context.Context, id []string) error
+	BatchRemoveAdmin(ctx context.Context, id []int64) error
 }
 
 type AdminUseCase struct {
@@ -67,12 +68,25 @@ func (uc *AdminUseCase) GetUserList(ctx context.Context, page, size int) ([]*dom
 	return result, nil
 }
 
-func (uc *AdminUseCase) RemoveAdmin(ctx context.Context, id string) (err error) {
+func (uc *AdminUseCase) RemoveAdmin(ctx context.Context, idStr string) (err error) {
+	id, _ := strconv.ParseInt(idStr, 10, 64)
 	err = uc.repo.RemoveAdmin(ctx, id)
 	return
 }
 
 func (uc *AdminUseCase) BatchRemoveAdmin(ctx context.Context, ids []string) (err error) {
-	err = uc.repo.BatchRemoveAdmin(ctx, ids)
+	if len(ids) == 0 {
+		return nil // 无需处理
+	}
+	// 将 ids 转换为 int64
+	intIDs := make([]int64, 0, len(ids))
+	for _, v := range ids {
+		id, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
+			return errdef.ErrInvalidIDFormat
+		}
+		intIDs = append(intIDs, id)
+	}
+	err = uc.repo.BatchRemoveAdmin(ctx, intIDs)
 	return
 }

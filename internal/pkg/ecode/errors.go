@@ -51,4 +51,5 @@ const (
 	ADMIN_UserNotFound
 	ADMIN_FailedToGetUser
 	ADMIN_FailedToUpdateUserd
+	ADMIN_InvalidIDFormat
 )

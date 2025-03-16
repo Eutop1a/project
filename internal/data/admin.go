@@ -51,12 +51,15 @@ func (a *adminRepository) AddAdmin(ctx context.Context, userID int64) (err error
 	if err != nil {
 		return errdef.ErrFailedToUpdateUser
 	}
-	return nil
-
+	err = tx.Commit()
+	return err
 }
 
 func (a *adminRepository) DeleteUser(ctx context.Context, id int64) (err error) {
-	return nil
+	// 直接执行软删除操作，无需开启事务
+	u := query.User
+	_, err = u.WithContext(ctx).Where(u.ID.Eq(id)).Delete()
+	return err
 }
 
 func (a *adminRepository) GetUserList(ctx context.Context, page, size int) (list []*model.User, err error) {
@@ -75,7 +78,7 @@ func (a *adminRepository) GetUserList(ctx context.Context, page, size int) (list
 			tx.Rollback()
 		}
 	}()
-	list, _, err = tx.User.WithContext(ctx).Debug().
+	list, _, err = tx.User.WithContext(ctx).
 		Select(query.User.ID, query.User.Username, query.User.IsAdmin, query.User.CreatedAt, query.User.UpdatedAt).
 		Where(query.User.DeletedAt.IsNull()).
 		Order(query.User.CreatedAt.Desc()).
@@ -84,10 +87,30 @@ func (a *adminRepository) GetUserList(ctx context.Context, page, size int) (list
 	return
 }
 
-func (a *adminRepository) RemoveAdmin(ctx context.Context, id string) error {
-	return nil
+func (a *adminRepository) RemoveAdmin(ctx context.Context, id int64) (err error) {
+	u := query.User
+	userDo := u.WithContext(ctx)
+	_, err = userDo.Where(u.ID.Eq(id)).UpdateSimple(u.IsAdmin.Value(false))
+	return err
 }
 
-func (a *adminRepository) BatchRemoveAdmin(ctx context.Context, id []string) error {
-	return nil
+func (a *adminRepository) BatchRemoveAdmin(ctx context.Context, ids []int64) (err error) {
+	// 开启事务
+	tx := query.Q.Begin()
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+		if p := recover(); p != nil {
+			tx.Rollback()
+		}
+	}()
+	// 使用批量更新
+	_, err = tx.User.WithContext(ctx).
+		Where(tx.User.ID.In(ids...)).
+		UpdateSimple(tx.User.IsAdmin.Value(false))
+	if err != nil {
+		return errdef.ErrFailedToUpdateUser
+	}
+	return tx.Commit()
 }

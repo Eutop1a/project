@@ -8,9 +8,11 @@ import (
 func init() {
 	ErrFailedToGetUser = kerr.New(ecode.ADMIN_FailedToGetUser, "找不到的对应用户", "找不到的对应用户")
 	ErrFailedToUpdateUser = kerr.New(ecode.ADMIN_FailedToUpdateUserd, "添加该用户为管理员失败", "添加该用户为管理员失败")
+	ErrInvalidIDFormat = kerr.New(ecode.ADMIN_InvalidIDFormat, "无效的ID格式", "无效的ID格式")
 }
 
 var (
 	ErrFailedToGetUser    *kerr.Error
 	ErrFailedToUpdateUser *kerr.Error
+	ErrInvalidIDFormat    *kerr.Error
 )

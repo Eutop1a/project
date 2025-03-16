@@ -3,7 +3,7 @@
 
 openapi: 3.0.3
 info:
-    title: Admin API
+    title: ""
     version: 0.0.1
 paths:
     /api/v1/admin/add-admin:
@@ -16,7 +16,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/AddAdminReq'
+                            $ref: '#/components/schemas/project.v1.admin.AddAdminReq'
                 required: true
             responses:
                 "200":
@@ -24,13 +24,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/project.v1.common.CommonResp'
     /api/v1/admin/batch-remove-admin:
         post:
             tags:
@@ -41,7 +35,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/BatchRemoveAdminReq'
+                            $ref: '#/components/schemas/project.v1.admin.BatchRemoveAdminReq'
                 required: true
             responses:
                 "200":
@@ -49,13 +43,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/project.v1.common.CommonResp'
     /api/v1/admin/remove-admin:
         post:
             tags:
@@ -66,7 +54,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/RemoveAdminReq'
+                            $ref: '#/components/schemas/project.v1.admin.RemoveAdminReq'
                 required: true
             responses:
                 "200":
@@ -74,13 +62,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/project.v1.common.CommonResp'
     /api/v1/admin/user/{userId}:
         delete:
             tags:
@@ -98,13 +80,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/project.v1.common.CommonResp'
     /api/v1/admin/users:
         get:
             tags:
@@ -128,28 +104,170 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetUserListResp'
-                default:
-                    description: Default error response
+                                $ref: '#/components/schemas/project.v1.admin.GetUserListResp'
+    /api/v1/problem:
+        post:
+            tags:
+                - Problem
+            description: 题目管理
+            operationId: Problem_CreateProblem
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/project.v1.problem.CreateProblemReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /api/v1/problem/{id}:
+        put:
+            tags:
+                - Problem
+            operationId: Problem_UpdateProblem
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/project.v1.problem.UpdateProblemReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+        delete:
+            tags:
+                - Problem
+            operationId: Problem_DeleteProblem
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content: {}
+    /api/v1/problems:
+        get:
+            tags:
+                - Problem
+            operationId: Problem_GetProblemList
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+            responses:
+                "200":
+                    description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Status'
+                                $ref: '#/components/schemas/project.v1.problem.GetProblemListResp'
+    /api/v1/user/login:
+        post:
+            tags:
+                - User
+            operationId: User_Login
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/project.v1.user.LoginReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/project.v1.user.LoginResp'
+    /api/v1/user/register:
+        post:
+            tags:
+                - User
+            operationId: User_Register
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/project.v1.user.RegisterReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/project.v1.user.RegisterResp'
+    /api/v1/user/{userId}/logout:
+        post:
+            tags:
+                - User
+            operationId: User_Logout
+            parameters:
+                - name: userId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/project.v1.user.LogoutReq'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content: {}
 components:
     schemas:
-        AddAdminReq:
+        project.v1.admin.AddAdminReq:
             type: object
             properties:
                 userId:
                     type: string
-        BatchRemoveAdminReq:
+        project.v1.admin.BatchRemoveAdminReq:
             type: object
             properties:
                 userIdList:
                     type: array
                     items:
                         type: string
-        CommonResp:
+        project.v1.admin.GetUserListResp:
+            type: object
+            properties:
+                commonResp:
+                    $ref: '#/components/schemas/project.v1.common.CommonResp'
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/project.v1.user.UserInfo'
+                total:
+                    type: integer
+                    format: int32
+        project.v1.admin.RemoveAdminReq:
+            type: object
+            properties:
+                userId:
+                    type: string
+        project.v1.common.CommonResp:
             type: object
             properties:
                 statusCode:
@@ -162,48 +280,96 @@ components:
                     additionalProperties:
                         type: string
             description: common.proto
-        GetUserListResp:
+        project.v1.problem.CreateProblemReq:
             type: object
             properties:
-                commonResp:
-                    $ref: '#/components/schemas/CommonResp'
-                users:
+                title:
+                    type: string
+                description:
+                    type: string
+                difficulty:
+                    type: integer
+                    format: int32
+                testCases:
+                    type: string
+        project.v1.problem.GetProblemListResp:
+            type: object
+            properties:
+                problems:
                     type: array
                     items:
-                        $ref: '#/components/schemas/UserInfo'
+                        $ref: '#/components/schemas/project.v1.problem.ProblemInfo'
                 total:
                     type: integer
                     format: int32
-        GoogleProtobufAny:
+        project.v1.problem.ProblemInfo:
             type: object
             properties:
-                '@type':
+                id:
                     type: string
-                    description: The type of the serialized message.
-            additionalProperties: true
-            description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        RemoveAdminReq:
+                title:
+                    type: string
+                description:
+                    type: string
+                difficulty:
+                    type: integer
+                    format: int32
+                createTime:
+                    type: string
+                updateTime:
+                    type: string
+        project.v1.problem.UpdateProblemReq:
+            type: object
+            properties:
+                id:
+                    type: string
+                title:
+                    type: string
+                description:
+                    type: string
+                difficulty:
+                    type: integer
+                    format: int32
+                testCases:
+                    type: string
+        project.v1.user.LoginReq:
+            type: object
+            properties:
+                username:
+                    type: string
+                password:
+                    type: string
+        project.v1.user.LoginResp:
+            type: object
+            properties:
+                commonResp:
+                    $ref: '#/components/schemas/project.v1.common.CommonResp'
+                accessToken:
+                    type: string
+        project.v1.user.LogoutReq:
             type: object
             properties:
                 userId:
                     type: string
-        Status:
+        project.v1.user.RegisterReq:
             type: object
             properties:
-                code:
-                    type: integer
-                    description: The status code, which should be an enum value of [google.rpc.Code][google.rpc.Code].
-                    format: int32
-                message:
+                username:
                     type: string
-                    description: A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the [google.rpc.Status.details][google.rpc.Status.details] field, or localized by the client.
-                details:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/GoogleProtobufAny'
-                    description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
-            description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        UserInfo:
+                password:
+                    type: string
+                email:
+                    type: string
+                verifyCode:
+                    type: string
+        project.v1.user.RegisterResp:
+            type: object
+            properties:
+                commonResp:
+                    $ref: '#/components/schemas/project.v1.common.CommonResp'
+                accessToken:
+                    type: string
+        project.v1.user.UserInfo:
             type: object
             properties:
                 userId:
@@ -220,3 +386,5 @@ components:
                     type: string
 tags:
     - name: Admin
+    - name: Problem
+    - name: User

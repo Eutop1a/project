@@ -35,7 +35,7 @@ service Knowledge {
   }
   rpc GetKnowledge(GetKnowledgeReq) returns (GetKnowledgeResp) {
     option (google.api.http) = {
-      get: "/api/v1/knowledge/{id}"
+      get: "/api/v1/knowledge/get/{id}"
     };
   }
   rpc ListKnowledge(ListKnowledgeReq) returns (ListKnowledgeResp) {

@@ -39,7 +39,7 @@ func RegisterKnowledgeHTTPServer(s *http.Server, srv KnowledgeHTTPServer) {
 	r.POST("/api/v1/knowledge/create", _Knowledge_CreateKnowledge0_HTTP_Handler(srv))
 	r.PUT("/api/v1/knowledge/update/{id}", _Knowledge_UpdateKnowledge0_HTTP_Handler(srv))
 	r.DELETE("/api/v1/knowledge/delete/{id}", _Knowledge_DeleteKnowledge0_HTTP_Handler(srv))
-	r.GET("/api/v1/knowledge/{id}", _Knowledge_GetKnowledge0_HTTP_Handler(srv))
+	r.GET("/api/v1/knowledge/get/{id}", _Knowledge_GetKnowledge0_HTTP_Handler(srv))
 	r.GET("/api/v1/knowledge/list", _Knowledge_ListKnowledge0_HTTP_Handler(srv))
 }
 
@@ -197,7 +197,7 @@ func (c *KnowledgeHTTPClientImpl) DeleteKnowledge(ctx context.Context, in *Delet
 
 func (c *KnowledgeHTTPClientImpl) GetKnowledge(ctx context.Context, in *GetKnowledgeReq, opts ...http.CallOption) (*GetKnowledgeResp, error) {
 	var out GetKnowledgeResp
-	pattern := "/api/v1/knowledge/{id}"
+	pattern := "/api/v1/knowledge/get/{id}"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationKnowledgeGetKnowledge))
 	opts = append(opts, http.PathTemplate(pattern))

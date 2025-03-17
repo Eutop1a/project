@@ -14,7 +14,7 @@ const TableNameExamPaper = "exam_paper"
 
 // ExamPaper mapped from table <exam_paper>
 type ExamPaper struct {
-	ID         int64          `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id"`
+	ID         int64          `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true" json:"id"`
 	Title      string         `gorm:"column:title;type:varchar(255);not null;comment:试卷标题" json:"title"`                                     // 试卷标题
 	Questions  string         `gorm:"column:questions;type:json;not null;comment:题目列表（格式：[{"type":"choice","id":1}, ...]）" json:"questions"` // 题目列表（格式：[{"type":"choice","id":1}, ...]）
 	CreateTime time.Time      `gorm:"column:create_time;type:datetime;default:CURRENT_TIMESTAMP" json:"create_time"`

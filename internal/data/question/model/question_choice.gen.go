@@ -8,7 +8,7 @@ const TableNameQuestionChoice = "question_choice"
 
 // QuestionChoice mapped from table <question_choice>
 type QuestionChoice struct {
-	ID      int64  `gorm:"column:id;type:int;primaryKey" json:"id"`
+	ID      int64  `gorm:"column:id;type:bigint;primaryKey" json:"id"`
 	OptionA string `gorm:"column:option_a;type:text;not null" json:"option_a"`
 	OptionB string `gorm:"column:option_b;type:text;not null" json:"option_b"`
 	OptionC string `gorm:"column:option_c;type:text;not null" json:"option_c"`

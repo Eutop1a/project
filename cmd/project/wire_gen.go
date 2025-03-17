@@ -25,9 +25,10 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, jwt *conf.JWT, logger log.Logger) (*kratos.App, func(), error) {
-	db := data.NewMySQL(confData)
+	mySQLQuestionDB := data.NewMySQLQuestion(confData)
+	mySQLUserDB := data.NewMySQLUser(confData)
 	client := data.NewRedis(confData)
-	dataData, cleanup, err := data.NewData(db, client, logger)
+	dataData, cleanup, err := data.NewData(mySQLQuestionDB, mySQLUserDB, client, logger)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -50,7 +51,9 @@ func wireApp(confServer *conf.Server, confData *conf.Data, jwt *conf.JWT, logger
 	questionRepository := data.NewQuestionRepo(dataData, logger)
 	questionUseCase := biz.NewQuestionUseCase(questionRepository, jwtAuth, logger)
 	questionService := service.NewQuestionService(questionUseCase, logger)
-	knowledgeService := service.NewKnowledgeService(questionUseCase, logger)
+	knowledgeRepository := data.NewKnowledgeRepo(dataData, logger)
+	knowledgeUseCase := biz.NewKnowledgeUseCase(knowledgeRepository, jwtAuth, logger)
+	knowledgeService := service.NewKnowledgeService(knowledgeUseCase, logger)
 	httpServer := server.NewHTTPServer(confServer, userService, adminService, questionService, knowledgeService, jwt, client, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {

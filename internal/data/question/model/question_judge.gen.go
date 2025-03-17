@@ -8,7 +8,7 @@ const TableNameQuestionJudge = "question_judge"
 
 // QuestionJudge mapped from table <question_judge>
 type QuestionJudge struct {
-	ID     int64 `gorm:"column:id;type:int;primaryKey" json:"id"`
+	ID     int64 `gorm:"column:id;type:bigint;primaryKey" json:"id"`
 	Answer int64 `gorm:"column:answer;type:tinyint(1);not null;comment:TRUE/FALSE" json:"answer"` // TRUE/FALSE
 }
 

@@ -18,7 +18,8 @@ data:
     port: "3306"
     user: root
     password: "123456"
-    database: project_question
+    databaseUser: project_user
+    databaseQuestion: project_question
     max_idle: 10
     max_open: 100
   redis:

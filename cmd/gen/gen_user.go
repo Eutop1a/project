@@ -9,8 +9,7 @@ import (
 	"helloworld/internal/data"
 )
 
-//go:generate go run generator.go
-func main0() {
+func genUser() {
 	dbUser := getUserGormDB()
 	g := gen.NewGenerator(gen.Config{
 		OutPath: "../../internal/data/user/query",
@@ -63,19 +62,17 @@ func main0() {
 func getUserGormDB() *gorm.DB {
 	c := config.New(
 		config.WithSource(
-			file.NewSource("../../configs/config.user.yaml"),
+			file.NewSource("../../configs/config.yaml"),
 		),
 	)
-
 	defer c.Close()
-
 	if err := c.Load(); err != nil {
 		panic(err)
 	}
-
 	var bc conf.Bootstrap
 	if err := c.Scan(&bc); err != nil {
 		panic(err)
 	}
-	return data.NewMySQL(bc.Data)
+	db := data.NewMySQLUser(bc.Data)
+	return db.DB
 }

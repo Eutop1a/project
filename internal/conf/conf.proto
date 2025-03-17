@@ -34,10 +34,11 @@ message Data {
     string port     = 2;
     string user     = 3;
     string password = 4;
-    string database = 5;
+    string databaseUser = 5;
     int32 max_idle  = 6;
     int32 max_open  = 7;
     int32 log_level = 8;
+    string databaseQuestion = 9;
   }
   message Redis {
     string host                            = 1;

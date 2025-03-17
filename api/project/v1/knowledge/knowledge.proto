@@ -51,6 +51,7 @@ message KnowledgeInfo {
   string description = 3;
   google.protobuf.Timestamp create_time = 4;
   google.protobuf.Timestamp update_time = 5;
+  string parent_id = 6;
 }
 
 message CreateKnowledgeReq {

@@ -3,20 +3,19 @@
 
 openapi: 3.0.3
 info:
-    title: Question API
+    title: Knowledge API
     version: 0.0.1
 paths:
-    /api/v1/question/create/choice:
+    /api/v1/knowledge/create:
         post:
             tags:
-                - Question
-            description: 创建选择题
-            operationId: Question_CreateQuestionChoice
+                - Knowledge
+            operationId: Knowledge_CreateKnowledge
             requestBody:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/QuestionChoiceInfo'
+                            $ref: '#/components/schemas/CreateKnowledgeReq'
                 required: true
             responses:
                 "200":
@@ -31,87 +30,11 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/question/create/essay:
-        post:
-            tags:
-                - Question
-            description: 创建简答题/大题
-            operationId: Question_CreateQuestionEssay
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionEssayInfo'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/v1/question/create/fill:
-        post:
-            tags:
-                - Question
-            description: 创建填空题
-            operationId: Question_CreateQuestionFill
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionFillInfo'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/v1/question/create/judge:
-        post:
-            tags:
-                - Question
-            description: 创建判断题
-            operationId: Question_CreateQuestionJudge
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionJudgeInfo'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/v1/question/delete/{id}:
+    /api/v1/knowledge/delete/{id}:
         delete:
             tags:
-                - Question
-            description: 删除题目
-            operationId: Question_DeleteQuestion
+                - Knowledge
+            operationId: Knowledge_DeleteKnowledge
             parameters:
                 - name: id
                   in: path
@@ -131,42 +54,40 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/question/list:
+    /api/v1/knowledge/list:
         get:
             tags:
-                - Question
-            description: 获取题目列表
-            operationId: Question_GetQuestionList
+                - Knowledge
+            operationId: Knowledge_ListKnowledge
             parameters:
-                - name: page
-                  in: query
-                  schema:
-                    type: integer
-                    format: int32
                 - name: pageSize
                   in: query
                   schema:
                     type: integer
                     format: int32
+                - name: pageNum
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/GetQuestionListResp'
+                                $ref: '#/components/schemas/ListKnowledgeResp'
                 default:
                     description: Default error response
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/question/update/choice/{id}:
+    /api/v1/knowledge/update/{id}:
         put:
             tags:
-                - Question
-            description: 更新选择题
-            operationId: Question_UpdateQuestionChoice
+                - Knowledge
+            operationId: Knowledge_UpdateKnowledge
             parameters:
                 - name: id
                   in: path
@@ -177,7 +98,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/QuestionChoiceInfo'
+                            $ref: '#/components/schemas/UpdateKnowledgeReq'
                 required: true
             responses:
                 "200":
@@ -192,93 +113,24 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/Status'
-    /api/v1/question/update/essay/{id}:
-        put:
+    /api/v1/knowledge/{id}:
+        get:
             tags:
-                - Question
-            description: 更新简答题/大题
-            operationId: Question_UpdateQuestionEssay
+                - Knowledge
+            operationId: Knowledge_GetKnowledge
             parameters:
                 - name: id
                   in: path
                   required: true
                   schema:
                     type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionEssayInfo'
-                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/v1/question/update/fill/{id}:
-        put:
-            tags:
-                - Question
-            description: 更新填空题
-            operationId: Question_UpdateQuestionFill
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionFillInfo'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonResp'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /api/v1/question/update/judge/{id}:
-        put:
-            tags:
-                - Question
-            description: 更新判断题
-            operationId: Question_UpdateQuestionJudge
-            parameters:
-                - name: id
-                  in: path
-                  required: true
-                  schema:
-                    type: string
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/QuestionJudgeInfo'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/CommonResp'
+                                $ref: '#/components/schemas/GetKnowledgeResp'
                 default:
                     description: Default error response
                     content:
@@ -300,19 +152,18 @@ components:
                     additionalProperties:
                         type: string
             description: common.proto
-        GetQuestionListResp:
+        CreateKnowledgeReq:
             type: object
             properties:
-                commonResp:
+                knowledge:
+                    $ref: '#/components/schemas/KnowledgeInfo'
+        GetKnowledgeResp:
+            type: object
+            properties:
+                common:
                     $ref: '#/components/schemas/CommonResp'
-                questions:
-                    type: array
-                    items:
-                        $ref: '#/components/schemas/QuestionInfo'
-                total:
-                    type: integer
-                    format: int32
-            description: 获取题目列表响应
+                knowledge:
+                    $ref: '#/components/schemas/KnowledgeInfo'
         GoogleProtobufAny:
             type: object
             properties:
@@ -321,81 +172,35 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        QuestionBaseInfo:
-            type: object
-            properties:
-                type:
-                    type: string
-                content:
-                    type: string
-                imageUrl:
-                    type: string
-                difficulty:
-                    type: number
-                    format: float
-                knowledge:
-                    type: string
-            description: 题目基础信息
-        QuestionChoiceInfo:
+        KnowledgeInfo:
             type: object
             properties:
                 id:
                     type: string
-                baseInfo:
-                    $ref: '#/components/schemas/QuestionBaseInfo'
-                optionA:
+                name:
                     type: string
-                optionB:
+                description:
                     type: string
-                optionC:
+                createTime:
                     type: string
-                optionD:
+                    format: date-time
+                updateTime:
                     type: string
-                answer:
+                    format: date-time
+                parentId:
                     type: string
-            description: 选择题信息
-        QuestionEssayInfo:
+        ListKnowledgeResp:
             type: object
             properties:
-                id:
-                    type: string
-                baseInfo:
-                    $ref: '#/components/schemas/QuestionBaseInfo'
-                reference:
-                    type: string
-            description: 简答题/大题信息
-        QuestionFillInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                baseInfo:
-                    $ref: '#/components/schemas/QuestionBaseInfo'
-                answer:
-                    type: string
-            description: 填空题信息
-        QuestionInfo:
-            type: object
-            properties:
-                choice:
-                    $ref: '#/components/schemas/QuestionChoiceInfo'
-                fill:
-                    $ref: '#/components/schemas/QuestionFillInfo'
-                judge:
-                    $ref: '#/components/schemas/QuestionJudgeInfo'
-                essay:
-                    $ref: '#/components/schemas/QuestionEssayInfo'
-            description: 题目信息
-        QuestionJudgeInfo:
-            type: object
-            properties:
-                id:
-                    type: string
-                baseInfo:
-                    $ref: '#/components/schemas/QuestionBaseInfo'
-                answer:
-                    type: boolean
-            description: 判断题信息
+                common:
+                    $ref: '#/components/schemas/CommonResp'
+                knowledgeList:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/KnowledgeInfo'
+                totalCount:
+                    type: integer
+                    format: int32
         Status:
             type: object
             properties:
@@ -412,5 +217,12 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateKnowledgeReq:
+            type: object
+            properties:
+                id:
+                    type: string
+                knowledge:
+                    $ref: '#/components/schemas/KnowledgeInfo'
 tags:
-    - name: Question
+    - name: Knowledge

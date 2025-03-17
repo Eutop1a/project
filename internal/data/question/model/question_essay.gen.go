@@ -8,7 +8,7 @@ const TableNameQuestionEssay = "question_essay"
 
 // QuestionEssay mapped from table <question_essay>
 type QuestionEssay struct {
-	ID        int64  `gorm:"column:id;type:int;primaryKey" json:"id"`
+	ID        int64  `gorm:"column:id;type:bigint;primaryKey" json:"id"`
 	Reference string `gorm:"column:reference;type:text;not null;comment:参考答案" json:"reference"` // 参考答案
 }
 

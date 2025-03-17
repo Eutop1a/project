@@ -14,12 +14,12 @@ const TableNameQuestionBase = "question_base"
 
 // QuestionBase mapped from table <question_base>
 type QuestionBase struct {
-	ID          int64          `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id"`
+	ID          int64          `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true" json:"id"`
 	Type        string         `gorm:"column:type;type:varchar(20);not null;index:idx_type,priority:1;comment:题型（choice/fill/judge/essay）" json:"type"` // 题型（choice/fill/judge/essay）
 	Content     string         `gorm:"column:content;type:text;not null;comment:题目文本内容" json:"content"`                                                 // 题目文本内容
 	ImagePath   string         `gorm:"column:image_path;type:varchar(255);comment:图片存储路径" json:"image_path"`                                            // 图片存储路径
 	Difficulty  float32        `gorm:"column:difficulty;type:float;index:idx_difficulty,priority:1;comment:难度系数（1-5）" json:"difficulty"`                // 难度系数（1-5）
-	KnowledgeID int64          `gorm:"column:knowledge_id;type:int;index:idx_knowledge,priority:1;comment:关联知识点分类" json:"knowledge_id"`                 // 关联知识点分类
+	KnowledgeID int64          `gorm:"column:knowledge_id;type:bigint;index:idx_knowledge,priority:1;comment:关联知识点分类" json:"knowledge_id"`              // 关联知识点分类
 	CreateTime  time.Time      `gorm:"column:create_time;type:datetime;default:CURRENT_TIMESTAMP" json:"create_time"`
 	UpdatedAt   time.Time      `gorm:"column:updated_at;type:timestamp;not null;default:CURRENT_TIMESTAMP" json:"updated_at"`
 	DeletedAt   gorm.DeletedAt `gorm:"column:deleted_at;type:timestamp" json:"deleted_at"`
